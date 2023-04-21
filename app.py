@@ -10,7 +10,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 app = Flask(__name__)
 
 LINK_PREFIX = 'api_v1/for-csgo-google-sheet'
-NEEDED_ARGUMENT_IN_LINK = 'skin_link'
+NEEDED_ARGUMENT_IN_LINK = 'skin_name'
 
 
 def create_driver():
@@ -32,6 +32,8 @@ def index():
 
     skin_link = request.args.get(NEEDED_ARGUMENT_IN_LINK)
     skin_link = skin_link.replace(' ', '%20')
+
+    skin_link = f'https://steamcommunity.com/market/listings/730/{skin_link}'
 
     driver = create_driver()
     try:

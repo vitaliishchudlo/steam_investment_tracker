@@ -30,10 +30,10 @@ def index():
     if not request.args.get(NEEDED_ARGUMENT_IN_LINK):
         return jsonify(error=f"You must specify a '{NEEDED_ARGUMENT_IN_LINK}' parameter in the link")
 
-    skin_link = request.args.get(NEEDED_ARGUMENT_IN_LINK)
-    skin_link = skin_link.replace(' ', '%20')
+    skin_name = request.args.get(NEEDED_ARGUMENT_IN_LINK)
+    skin_name = skin_name.replace(' ', '%20')
 
-    skin_link = f'https://steamcommunity.com/market/listings/730/{skin_link}'
+    skin_link = f'https://steamcommunity.com/market/listings/730/{skin_name}'
 
     driver = create_driver()
     try:
@@ -60,7 +60,7 @@ def index():
         return jsonify(title_of_skin=name_of_skin_text, lowest_price=lowest_price_text,
                        count_of_sales=count_of_sales_text)
     except Exception as err:
-        print('\n\n ERROR: ', err)
+        return jsonify(title='Error', skin_link=skin_link, traceback=err)
     finally:
         driver.quit()
 

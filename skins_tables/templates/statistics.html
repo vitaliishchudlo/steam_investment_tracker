@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Skin Statistics</title>
+    <style>
+        body {
+            background: #3b3b3b;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+            min-width: 600px;
+        }
+
+        thead {
+            background-color: #008B8B;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px;
+            border: 1px solid black;
+        }
+
+        td {
+            text-align: left;
+            padding: 12px;
+            border: 1px solid black;
+            background: #ebcda7;
+        }
+
+        td:nth-child(even) {
+            background-color: #DEB887;
+        }
+
+        tr:hover td {
+            background-color: #ffefdb;
+        }
+    </style>
+
+</head>
+<body>
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Price Per Item</th>
+        <th>Price for All</th>
+        <th>Item Count</th>
+        <th>Current Price</th>
+        <th>Created Date</th>
+        <th>Last modified Date</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for skin in skins %}
+    <tr>
+        <td>{{ skin.name }}</td>
+        <td>{{ skin.price_per_item }} $</td>
+        <td>{{ skin.items_total }} $</td>
+        <td>{{ skin.item_count }}</td>
+        <td>{{ skin.current_price }} $</td>
+        <td>{{ skin.created_date }}</td>
+        <td>{{ skin.modified_date }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</body>
+</html>

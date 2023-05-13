@@ -26,9 +26,19 @@
 </head>
 <body>
 	{% if refreshing_started %}
-		<h1 class="success">Refreshing successfully started</h1>
+		<h1 class="success">😎 Refreshing started...</h1>
 	{% else %}
-		<h1 class="error">Refreshing failed to start</h1>
+		<h1 class="error">🥺 Refreshing failed 😭</h1>
 	{% endif %}
+
+	<script>
+		setTimeout(function(){
+			document.querySelector('h1').textContent = 'Redirecting to the table...';
+			setTimeout(function(){
+				window.location.href = '/statistics/';
+			}, 800);
+		}, 1800);
+	</script>
+
 </body>
 </html>

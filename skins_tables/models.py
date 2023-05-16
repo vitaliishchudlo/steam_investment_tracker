@@ -9,13 +9,13 @@ class Skin(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     modified_date = models.DateTimeField(auto_now=True)
 
-    @property
-    def items_total(self):
-        return Decimal(str(self.price_per_item)) * Decimal(str(self.item_count))
-
-    @property
-    def current_items_total(self):
-        return Decimal(str(self.current_price)) * Decimal(str(self.item_count))
+    # @property
+    # def items_total(self):
+    #     return Decimal(str(self.price_per_item)) * Decimal(str(self.item_count))
+    #
+    # @property
+    # def current_items_total(self):
+    #     return Decimal(str(self.current_price)) * Decimal(str(self.item_count))
 
     def __str__(self):
         return self.name

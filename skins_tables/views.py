@@ -6,7 +6,9 @@ from django.urls import reverse
 from .models import Skin
 import requests
 import json
-
+from datetime import datetime, timedelta
+from datetime import datetime, timedelta
+from django.utils import timezone
 REFRESHING_PROCESS = False
 
 def index(request):
@@ -23,6 +25,11 @@ def statistics(request):
 
 
 def refreshing_skins_price():
+    # UnComment it in the future
+    # five_minutes_ago = timezone.now() - timedelta(minutes=5)
+    # skins = Skin.objects.filter(modified_date__lte=five_minutes_ago)
+    # skin_names = [skin.name for skin in skins]
+
     skins = Skin.objects.all()
     skin_names = [skin.name for skin in skins]
 

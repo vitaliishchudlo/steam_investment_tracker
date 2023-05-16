@@ -40,6 +40,7 @@ def refreshing_skins_price():
                 print(skin_name)
                 print(skin_price)
         else:
+            
             print('Error:', response.status_code)
 
     print('Skins prices DICT: ', skin_prices)

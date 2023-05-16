@@ -22,11 +22,7 @@ def statistics(request):
     return render(request, 'statistics.html', context)
 
 
-async def refreshing_skins_price(request):
-    # for x in range(10):
-    #     print(f'In the refreshing_skins_price METHOD {x}/10')
-    #     await asyncio.sleep(1)
-
+def refreshing_skins_price():
     skins = Skin.objects.all()
     skin_names = [skin.name for skin in skins]
 
@@ -39,9 +35,10 @@ async def refreshing_skins_price(request):
         if response.status_code == 200:
             data = json.loads(response.text)
             skin_price = data.get('skin_price').replace('$', '')
-            skin_prices[skin_name] = skin_price
-            print(skin_name)
-            print(skin_price)
+            if not skin_price == 'not found':
+                skin_prices[skin_name] = skin_price
+                print(skin_name)
+                print(skin_price)
         else:
             print('Error:', response.status_code)
 
@@ -56,12 +53,12 @@ async def refreshing_skins_price(request):
             pass
 
 
-def start_refreshing_skins_price(request):
+def start_refreshing_skins_price():
     global REFRESHING_PROCESS
     REFRESHING_PROCESS = True
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    loop.run_until_complete(refreshing_skins_price(request))
+
+    refreshing_skins_price()
+
     REFRESHING_PROCESS = False
 
 def refresh(request):
@@ -70,7 +67,7 @@ def refresh(request):
     if REFRESHING_PROCESS:
         return render(request, 'refresh.html', {'refreshing_started': False})
     else:
-        thread = threading.Thread(target=start_refreshing_skins_price, args=(request,))
+        thread = threading.Thread(target=start_refreshing_skins_price)
         thread.start()
         return render(request, 'refresh.html', {'refreshing_started': True})
 

@@ -21,13 +21,13 @@
         }
 
         th {
-            text-align: left;
+            text-align: center;
             padding: 12px;
             border: 1px solid black;
         }
 
         td {
-            text-align: left;
+            text-align: center;
             padding: 12px;
             border: 1px solid black;
             background: #ebcda7;
@@ -94,40 +94,68 @@
             height: 30px;
             filter: invert(100%);
         }
+
+        .highlight_red {
+            color: red;
+        }
+        .highlight_green {
+            color: green;
+        }
     </style>
 </head>
 <body>
-    <a href="/" class="home-button">
-        <img src="https://cdn-icons-png.flaticon.com/512/60/60817.png" alt="Home button">
-    </a>
-    <table>
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Price Per Item</th>
-            <th>Price for All</th>
-            <th>Item Count</th>
-            <th>Current Price</th>
-            <th>Created Date</th>
-            <th>Last modified Date</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for skin in skins %}
-        <tr>
-            <td>{{ skin.name }}</td>
-            <td>{{ skin.price_per_item }} $</td>
-            <td>{{ skin.items_total }} $</td>
-            <td>{{ skin.item_count }}</td>
-            <td>{{ skin.current_price }} $</td>
-            <td>{{ skin.created_date }}</td>
-            <td>{{ skin.modified_date }}</td>
-        </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-    <a href="{% url 'refresh' %}" class="refresh-button">
-        <img src="https://cdn-icons-png.flaticon.com/512/61/61444.png" alt="Refresh button">
-    </a>
+{% load mathfilters %}
+<a href="/" class="home-button">
+    <img src="https://cdn-icons-png.flaticon.com/512/60/60817.png" alt="Home button">
+</a>
+<table>
+    <thead>
+    <tr>
+        <th rowspan="2">ID</th>
+        <th rowspan="2">Skin name</th>
+        <th rowspan="2">Item <br>count</br></th>
+        <th colspan="2">Purchase price</th>
+        <th colspan="2">Current Price</th>
+        <th rowspan="2">Created Date</th>
+        <th rowspan="2">Last modified Date</th>
+    </tr>
+    <tr>
+        <th>For 1pc</th>
+        <th>For all</th>
+        <th>For 1pc</th>
+        <th>For all</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for skin in skins reversed %}
+    <tr>
+        <td>{{ skin.id }}</td>
+        <td>{{ skin.name }}</td>
+        <td>{{ skin.item_count }}</td>
+        <td>{{ skin.price_per_item }}</td>
+<!--        <td>{{ skin.item_count|mul:skin.price_per_item }} $-->
+        <td>{{ skin.current_price }} $
+            {% if skin.current_price > skin.price_per_item %}
+                <span class="highlight_green">
+                    (+{{ skin.current_price|mul:100|div:skin.price_per_item|sub:100|floatformat:2 }} %)
+                </span>
+            {% else %}
+                <span class="highlight_red">
+                    ({{ skin.current_price|mul:100|div:skin.price_per_item|sub:100|floatformat:2 }} %)
+                </span>
+            {% endif %}
+        </td>
+        <td>{{ skin.current_price }}</td>
+        <td>{{ skin.current_items_total }}</td>
+        <td>{{ skin.created_date }}</td>
+        <td>{{ skin.modified_date }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<!--    <td style="color: #9217d4;">{{ skin.current_price }}</td>-->
+<a href="{% url 'refresh' %}" class="refresh-button">
+    <img src="https://cdn-icons-png.flaticon.com/512/61/61444.png" alt="Refresh button">
+</a>
 </body>
 </html>

@@ -13,5 +13,9 @@ class Skin(models.Model):
     def items_total(self):
         return Decimal(str(self.price_per_item)) * Decimal(str(self.item_count))
 
+    @property
+    def current_items_total(self):
+        return Decimal(str(self.current_price)) * Decimal(str(self.item_count))
+
     def __str__(self):
         return self.name

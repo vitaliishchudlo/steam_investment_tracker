@@ -1,4 +1,3 @@
-import asyncio
 import threading
 
 from django.shortcuts import render
@@ -9,7 +8,9 @@ import json
 from datetime import datetime, timedelta
 from datetime import datetime, timedelta
 from django.utils import timezone
+
 REFRESHING_PROCESS = False
+
 
 def index(request):
     button_url = reverse('admin:index')
@@ -30,7 +31,7 @@ def refreshing_skins_price():
     # skins = Skin.objects.filter(modified_date__lte=five_minutes_ago)
     # skin_names = [skin.name for skin in skins]
 
-    skins = Skin.objects.all()
+    skins = Skin.objects.all().order_by('-id')
     skin_names = [skin.name for skin in skins]
 
     skin_prices = {}
@@ -47,7 +48,6 @@ def refreshing_skins_price():
                 print(skin_name)
                 print(skin_price)
         else:
-            
             print('Error:', response.status_code)
 
     print('Skins prices DICT: ', skin_prices)
@@ -69,8 +69,8 @@ def start_refreshing_skins_price():
 
     REFRESHING_PROCESS = False
 
-def refresh(request):
 
+def refresh(request):
     global REFRESHING_PROCESS
     if REFRESHING_PROCESS:
         return render(request, 'refresh.html', {'refreshing_started': False})
@@ -78,5 +78,3 @@ def refresh(request):
         thread = threading.Thread(target=start_refreshing_skins_price)
         thread.start()
         return render(request, 'refresh.html', {'refreshing_started': True})
-
-

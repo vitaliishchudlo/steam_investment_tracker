@@ -14,13 +14,10 @@
             min-width: 600px;
         }
 
-        thead {
-            background-color: #008B8B;
+        th {
             color: #fff;
             font-weight: bold;
-        }
-
-        th {
+            background-color: #008B8B;
             text-align: center;
             padding: 12px;
             border: 1px solid black;
@@ -30,6 +27,7 @@
             text-align: center;
             padding: 12px;
             border: 1px solid black;
+
             background: #ebcda7;
         }
 
@@ -95,35 +93,12 @@
             filter: invert(100%);
         }
 
-        /* Colors for % of income*/
-
-        .highlight-red {
+        .highlight_red {
             color: red;
         }
 
-        .highlight-green {
+        .highlight_green {
             color: green;
-        }
-
-        /* Custom Styles */
-        .purchase-price {
-            /*color: blue;*/
-        }
-
-        .current-price {
-            /*color: orange;*/
-        }
-
-        .income-percentage {
-            /*color: purple;*/
-        }
-
-        .created-date {
-            /*color: #2ecc71;*/
-        }
-
-        .modified-date {
-            /*color: #e74c3c;*/
         }
     </style>
 </head>
@@ -141,14 +116,14 @@
         <th colspan="2">Purchase price</th>
         <th colspan="2">Current Price</th>
         <th rowspan="2">% <br>of income</th>
-        <th rowspan="2" class="created-date">Created Date</th>
-        <th rowspan="2" class="modified-date">Last modified Date</th>
+        <th rowspan="2">Created Date</th>
+        <th rowspan="2">Last modified Date</th>
     </tr>
     <tr>
-        <th class="purchase-price">For 1pc</th>
-        <th class="purchase-price">For all</th>
-        <th class="current-price">For 1pc</th>
-        <th class="current-price">For all</th>
+        <th>For 1pc</th>
+        <th>For all</th>
+        <th>For 1pc</th>
+        <th>For all</th>
     </tr>
     </thead>
     <tbody>
@@ -157,23 +132,24 @@
         <td>{{ skin.id }}</td>
         <td>{{ skin.name }}</td>
         <td>{{ skin.item_count }}</td>
-        <td class="purchase-price">{{ skin.price_per_item }} $</td>
-        <td class="purchase-price">{{ skin.price_per_item|mul:skin.item_count }} $</td>
-        <td class="current-price">{{ skin.current_price }} $</td>
-        <td class="current-price">{{ skin.current_price|mul:skin.item_count }} $</td>
+        <td>{{ skin.price_per_item }} $</td>
+        <td>{{ skin.price_per_item|mul:skin.item_count }} $</td>
+        <td>{{ skin.current_price }} $</td>
+        <td>{{ skin.current_price|mul:skin.item_count }} $</td>
+
         <td>
             {% if skin.current_price > skin.price_per_item %}
-            <span class="highlight-green">
+            <span class="highlight_green">
                 +{{ skin.current_price|mul:100|div:skin.price_per_item|sub:100|floatformat:2 }} %
             </span>
             {% else %}
-            <span class="highlight-red">
+            <span class="highlight_red">
                 {{ skin.current_price|mul:100|div:skin.price_per_item|sub:100|floatformat:2 }} %
             </span>
             {% endif %}
         </td>
-        <td class="created-date">{{ skin.created_date|date:"H:i, F j, Y" }}</td>
-        <td class="modified-date">{{ skin.modified_date|date:"H:i, F j" }}</td>
+        <td>{{ skin.created_date|date:"H:i, F j, Y" }}</td>
+        <td>{{ skin.modified_date|date:"H:i, F j" }}</td>
     </tr>
     {% endfor %}
     </tbody>

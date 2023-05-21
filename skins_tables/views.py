@@ -39,7 +39,6 @@ def refreshing_skins_price():
     skins = Skin.objects.all().order_by('-id')
     skin_names = [skin.name for skin in skins]
 
-    skin_prices = {}
     base_link = f'http://18.193.224.198/?skin_name='
 
     for skin_name in skin_names:
@@ -49,21 +48,15 @@ def refreshing_skins_price():
             data = json.loads(response.text)
             skin_price = data.get('skin_price').replace('$', '')
             if not skin_price == 'not found':
-                skin_prices[skin_name] = skin_price
-                print(skin_name)
-                print(skin_price)
+                try:
+                    skin = Skin.objects.get(name=skin_name)
+                    skin.current_price = skin_price
+                    skin.save()
+                    print(f'Skin name: {skin_name} | Skin price: {skin_price}')
+                except Skin.DoesNotExist:
+                    pass
         else:
             print('Error:', response.status_code)
-
-    print('Skins prices DICT: ', skin_prices)
-
-    for name, price in skin_prices.items():
-        try:
-            skin = Skin.objects.get(name=name)
-            skin.current_price = price
-            skin.save()
-        except Skin.DoesNotExist:
-            pass
 
 
 def start_refreshing_skins_price():

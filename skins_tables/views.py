@@ -1,4 +1,3 @@
-import asyncio
 import threading
 
 from django.shortcuts import render
@@ -6,11 +5,19 @@ from django.urls import reverse
 from .models import Skin
 import requests
 import json
+from datetime import datetime, timedelta
+from datetime import datetime, timedelta
+from django.utils import timezone
 
 REFRESHING_PROCESS = False
 
+"""
+IT IS TMP VARIANT. THE PRINTS WILL BE REMOVED IN THE FUTURE
+"""
+
 def index(request):
     button_url = reverse('admin:index')
+    
     return render(request, 'index.html', {'button_url': button_url})
 
 
@@ -19,14 +26,19 @@ def statistics(request):
     context = {
         'skins': skins,
     }
+    
     return render(request, 'statistics.html', context)
 
 
 def refreshing_skins_price():
-    skins = Skin.objects.all()
+    # UnComment it in the future
+    # five_minutes_ago = timezone.now() - timedelta(minutes=5)
+    # skins = Skin.objects.filter(modified_date__lte=five_minutes_ago)
+    # skin_names = [skin.name for skin in skins]
+
+    skins = Skin.objects.all().order_by('-id')
     skin_names = [skin.name for skin in skins]
 
-    skin_prices = {}
     base_link = f'http://18.193.224.198/?skin_name='
 
     for skin_name in skin_names:
@@ -36,21 +48,15 @@ def refreshing_skins_price():
             data = json.loads(response.text)
             skin_price = data.get('skin_price').replace('$', '')
             if not skin_price == 'not found':
-                skin_prices[skin_name] = skin_price
-                print(skin_name)
-                print(skin_price)
+                try:
+                    skin = Skin.objects.get(name=skin_name)
+                    skin.current_price = skin_price
+                    skin.save()
+                    print(f'Skin name: {skin_name} | Skin price: {skin_price}')
+                except Skin.DoesNotExist:
+                    pass
         else:
             print('Error:', response.status_code)
-
-    print('Skins prices DICT: ', skin_prices)
-
-    for name, price in skin_prices.items():
-        try:
-            skin = Skin.objects.get(name=name)
-            skin.current_price = price
-            skin.save()
-        except Skin.DoesNotExist:
-            pass
 
 
 def start_refreshing_skins_price():
@@ -61,14 +67,13 @@ def start_refreshing_skins_price():
 
     REFRESHING_PROCESS = False
 
-def refresh(request):
 
+def refresh(request):
     global REFRESHING_PROCESS
     if REFRESHING_PROCESS:
         return render(request, 'refresh.html', {'refreshing_started': False})
     else:
         thread = threading.Thread(target=start_refreshing_skins_price)
         thread.start()
+        
         return render(request, 'refresh.html', {'refreshing_started': True})
-
-

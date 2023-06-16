@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Refresh Page</title>
+	<style>
+		body {
+			background: #f2f2f2;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			height: 100vh;
+			font-family: Arial, sans-serif;
+		}
+		h1 {
+			font-size: 24px;
+			margin-bottom: 20px;
+		}
+		.success {
+			color: green;
+		}
+		.error {
+			color: red;
+		}
+	</style>
+</head>
+<body>
+	{% if refreshing_started %}
+		<h1 class="success">😎 Refreshing started...</h1>
+	{% else %}
+		<h1 class="error">🥺 Refreshing failed 😭</h1>
+	{% endif %}
+
+	<script>
+		setTimeout(function(){
+			document.querySelector('h1').textContent = 'Redirecting to the table...';
+			setTimeout(function(){
+				window.location.href = '/statistics/';
+			}, 800);
+		}, 1800);
+	</script>
+
+</body>
+</html>

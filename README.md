@@ -10,6 +10,4 @@ The Steam Investment Tracker project focuses on empowering users to make informe
 
 **This project is now closed.**
 
-After extensive research, we discovered an identical alternative web server that already fulfills the requirements of the Steam Inventory Tracker. Therefore, it no longer makes sense to continue the development of our own implementation.
-
 While developing the Steam Inventory Tracker, we stumbled upon an existing software that not only matched our project's functionalities but also boasted a strong user base and ongoing support. Therefore, it no longer makes sense to continue the development of our own implementation.

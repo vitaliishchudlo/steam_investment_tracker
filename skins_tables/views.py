@@ -75,5 +75,4 @@ def refresh(request):
     else:
         thread = threading.Thread(target=start_refreshing_skins_price)
         thread.start()
-        
         return render(request, 'refresh.html', {'refreshing_started': True})

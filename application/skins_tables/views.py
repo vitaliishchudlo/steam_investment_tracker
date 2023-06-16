@@ -1,13 +1,13 @@
+import json
 import threading
+from datetime import timedelta
 
+import requests
 from django.shortcuts import render
 from django.urls import reverse
-from .models import Skin
-import requests
-import json
-from datetime import datetime, timedelta
-from datetime import datetime, timedelta
 from django.utils import timezone
+
+from .models import Skin
 
 REFRESHING_PROCESS = False
 
@@ -15,9 +15,10 @@ REFRESHING_PROCESS = False
 IT IS TMP VARIANT. THE PRINTS WILL BE REMOVED IN THE FUTURE
 """
 
+
 def index(request):
     button_url = reverse('admin:index')
-    
+
     return render(request, 'index.html', {'button_url': button_url})
 
 
@@ -26,20 +27,16 @@ def statistics(request):
     context = {
         'skins': skins,
     }
-    
+
     return render(request, 'statistics.html', context)
 
 
 def refreshing_skins_price():
-    # UnComment it in the future
-    # five_minutes_ago = timezone.now() - timedelta(minutes=5)
-    # skins = Skin.objects.filter(modified_date__lte=five_minutes_ago)
-    # skin_names = [skin.name for skin in skins]
-
-    skins = Skin.objects.all().order_by('-id')
+    five_minutes_ago = timezone.now() - timedelta(minutes=5)
+    skins = Skin.objects.filter(modified_date__lte=five_minutes_ago).order_by('-id')
     skin_names = [skin.name for skin in skins]
 
-    base_link = f'http://18.193.224.198/?skin_name='
+    base_link = f'http://18.193.224.198/?skin_name='  # INSERT HERE THE IP ADDRESS OF WEB SERVER PART
 
     for skin_name in skin_names:
         print('The link: ', base_link + skin_name)
